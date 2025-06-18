@@ -21,8 +21,11 @@ def main():
     if parsed_args.aggregate:
         col, _, func = parse_condition(parsed_args.aggregate)
         result = aggregate(rows, col, func)
-        rows = [{col: result},]
-
+        if result is not None:
+            rows = [{col: result},]
+        else:
+            print("No data for aggregate")
+            return
     print(tabulate(rows, headers="keys", tablefmt="grid"))
 
 

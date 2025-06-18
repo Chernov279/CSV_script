@@ -29,6 +29,8 @@ def aggregate(rows, column, func):
         values = [float(row[column]) for row in rows]
     except ValueError:
         raise ValueError(f"Column {column} must be numeric for aggregation")
+    except KeyError:
+        raise KeyError(f"Column {column} is not exist")
 
     if func == 'avg':
         return round(sum(values) / len(values), 3) if values else None
