@@ -1,7 +1,7 @@
 import re
 
 
-def parse_condition(where_clause: str):
+def parse_condition(where_clause: str) -> tuple[str, str, str]:
     match = re.match(r'^([^=<>]+?)([=<>])([^=<>]+)$', where_clause)
     if not match:
         raise ValueError(f"incorrect condition : {where_clause}")

@@ -2,7 +2,7 @@ import argparse
 
 
 class Parser:
-    def __init__(self):
+    def __init__(self) -> None:
         self.parser = argparse.ArgumentParser(
             description="CSV tool: filter and aggregate columns."
         )
@@ -26,5 +26,5 @@ class Parser:
             help='Aggregate column, e.g. --aggregate "price=avg"'
         )
 
-    def parse_args(self):
+    def parse_args(self) -> argparse.Namespace:
         return self.parser.parse_args()

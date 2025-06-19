@@ -1,7 +1,8 @@
 import re
+from typing import Optional, Callable
 
 
-def filter_rows(rows, column, operator, value: str):
+def filter_rows(rows: list[dict[str, str]], column: str, operator: str, value: str) -> list[dict[str, str]]:
     numeric = False
     if re.fullmatch(r'\d+(\.\d+|,\d+)?', value):
         value = float(value)
@@ -24,7 +25,14 @@ def filter_rows(rows, column, operator, value: str):
         raise ValueError(f"Unsupported operator: {operator}")
 
 
-def aggregate(rows, column, func):
+AGG_FUNCTIONS: dict[str, Callable[[list[float]], float]] = {
+    'avg': lambda values: sum(values) / len(values),
+    'min': min,
+    'max': max,
+}
+
+
+def aggregate(rows: list[dict[str, str]], column: str, func: str) -> Optional[float]:
     try:
         values = [float(row[column]) for row in rows]
     except ValueError:
@@ -32,11 +40,8 @@ def aggregate(rows, column, func):
     except KeyError:
         raise KeyError(f"Column {column} is not exist")
 
-    if func == 'avg':
-        return round(sum(values) / len(values), 3) if values else None
-    elif func == 'min':
-        return round(min(values), 3) if values else None
-    elif func == 'max':
-        return round(max(values), 3) if values else None
-    else:
+    agg_func = AGG_FUNCTIONS.get(func)
+    if not agg_func:
         raise ValueError(f"Unsupported aggregation function: {func}")
+
+    return round(agg_func(values), 3) if values else None

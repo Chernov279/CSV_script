@@ -6,7 +6,7 @@ from parser import Parser
 from tabulate import tabulate
 
 
-def main():
+def main() -> None:
     parser = Parser()
     parsed_args = parser.parse_args()
 
